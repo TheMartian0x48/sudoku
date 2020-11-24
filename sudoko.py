@@ -4,7 +4,16 @@ from random import choice, choices
 class Sudoko:
     def __init__(self, level):
         self.level = level
-        self.grid = self.initiate()
+        # self.grid = self.initiate()
+        self.grid = [[-1, -1, -1, -1, -1, 4, -1, 9, -1],
+                     [8, -1, 2, 9, 7, -1, -1, -1, -1],
+                     [9, -1, 1, 2, -1, -1, 3, -1, -1],
+                     [-1, -1, -1, -1, 4, 9, 1, 5, 7],
+                     [-1, 1, 3, -1, 5, -1, 9, 2, -1],
+                     [5, 7, 9, -1, 2, -1, -1, -1, -1],
+                     [-1, -1, 7, -1, -1, 2, 6, -1, 3],
+                     [-1, -1, -1, -1, 3, 8, 2, -1, 5],
+                     [-1, 2, -1, 5, -1, -1, -1, -1, -1]]
 
     def initiate(self):
         grid = [[7, 3, 5, 6, 1, 4, 8, 9, 2],
@@ -131,17 +140,27 @@ class Sudoko:
         return is_solvable
 
     def __str__(self):
-        print("\t┌───┬───┬───┬───┬───┬───┬───┬───┬───┐")
-        middle = "\t├───┼───┼───┼───┼───┼───┼───┼───┼───┤"
-        border = "│"
+        print("\t┏━━━┯━━━┯━━━┳━━━┯━━━┯━━━┳━━━┯━━━┯━━━┓")
+        middle = "\t┣───┼───┼───╂───┼───┼───╂───┼───┼───┫"
+        bmiddle = "\t┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫"
         for r in range(9):
-            s = "\t" + border
+            s = "\t┃"
             for c in range(9):
-                s += " " + str(self.grid[r][c]) + " " + border
+                if self.grid[r][c] == -1:
+                    s += "   "
+                else:
+                    s += " " + str(self.grid[r][c]) + " "
+                if c % 3 == 2:
+                    s += "┃"
+                else:
+                    s += "│"
             print(s)
             if r < 8:
-                print(middle)
-        print("\t└───┴───┴───┴───┴───┴───┴───┴───┴───┘")
+                if r % 3 == 2:
+                    print(bmiddle)
+                else:
+                    print(middle)
+        print("\t┗━━━┷━━━┷━━━┻━━━┷━━━┷━━━┻━━━┷━━━┷━━━┛")
 
 
 s = Sudoko(1)
