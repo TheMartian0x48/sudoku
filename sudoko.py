@@ -42,8 +42,6 @@ class Sudoko:
             grid[b1 * 3 + 2] = grid[b2 * 3 + 2]
             grid[b2 * 3], grid[b2 * 3 + 1], grid[b2 * 3 + 2] = tmp1, tmp2, tmp3
 
-        for r in grid:
-            print(r)
         return grid
 
     def check(self):
@@ -108,17 +106,19 @@ class Sudoko:
         if r == 8 and c == 8:
             return self.__check_row(r) and self.__check_column and self.__check_box(r, c)
         for v in range(9):
+            self.grid[r][c] = v
             if self.__check_row(r) and self.__check_column(c) and self.__check_box(r, c):
                 rr, cc = r, c
                 while self.grid[rr][cc] != -1:
                     cc += 1
                     if cc == 9:
-                        cc = 0, rr += 1
+                        cc,  rr = 0, rr + 1
                     if rr == 9:
                         break
-                if rr < 9 and cc < 9 and self.grid[rr][cc] == -1 and __backtrack(rr, cc) == False:
+                if rr < 9 and cc < 9 and self.grid[rr][cc] == -1 and self.__backtrack(rr, cc) == False:
+                    self.grid[r][c] = -1
                     return False
-
+            self.grid[r][c] = -1
         return True
 
     def __solvable(self) -> bool:
@@ -130,6 +130,19 @@ class Sudoko:
                 self.__backtrack(r, c)
         return is_solvable
 
+    def __str__(self):
+        print("\t┌───┬───┬───┬───┬───┬───┬───┬───┬───┐")
+        middle = "\t├───┼───┼───┼───┼───┼───┼───┼───┼───┤"
+        border = "│"
+        for r in range(9):
+            s = "\t" + border
+            for c in range(9):
+                s += " " + str(self.grid[r][c]) + " " + border
+            print(s)
+            if r < 8:
+                print(middle)
+        print("\t└───┴───┴───┴───┴───┴───┴───┴───┴───┘")
+
 
 s = Sudoko(1)
-print(s.check())
+s.__str__()
