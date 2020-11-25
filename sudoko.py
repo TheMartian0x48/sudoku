@@ -249,9 +249,16 @@ class Sudoko:
             return
         self.grid[r][c] = val
 
+    def get(self, r, c, val):
+        if r > 8 or r < 0 or c < 0 or c > 8:
+            print("Out of range")
+            return
+        return self.grid[r][c]
+
+
 if __name__ == "__main__":
     s = Sudoko(1)
-    print(s)    
+    print(s)
     num = 10
     while num > 0:
         [r, c, val] = input(" : ").split()
@@ -262,4 +269,3 @@ if __name__ == "__main__":
         print(s)
         num -= 1
     print(s.check())
-    
