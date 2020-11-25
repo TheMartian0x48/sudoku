@@ -92,12 +92,14 @@ class Sudoko:
                     print(f"{self.grid[r][c]} appear again in box {b + 1}")
                     return False
                 box[box_idx][self.grid[r][c]] = True
-                for i in range(1, 10):
-                    if row[i] == False:
-                        return False
+            for i in range(1, 10):
+                if row[i] == False:
+                    print(f"Missing {i} in row {r}")
+                    return False
             if r % 3 == 2:
                 for i in range(1, 10):
                     if box[0][i] == False or box[1][i] == False or box[2][i] == False:
+                        print(f"Missing {i} in box {r // 3}")
                         return False
 
         # checking columns
@@ -108,9 +110,10 @@ class Sudoko:
                     print(f"{self.grid[r][c]} appear again in col {c + 1}")
                     return False
                 col[self.grid[r][c]] = True
-                for i in range(1, 10):
-                    if col[i] == False:
-                        return False
+            for i in range(1, 10):
+                if col[i] == False:
+                    print(f"Missing {i} in column {c} ")
+                    return False
         print("Valid")
         return True
 
@@ -246,9 +249,17 @@ class Sudoko:
             return
         self.grid[r][c] = val
 
-
 if __name__ == "__main__":
     s = Sudoko(1)
-    print(s)
-    print(s.solvable())
+    print(s)    
+    num = 10
+    while num > 0:
+        [r, c, val] = input(" : ").split()
+        r = int(r)
+        c = int(c)
+        val = int(val)
+        s.set(r, c, val)
+        print(s)
+        num -= 1
     print(s.check())
+    
