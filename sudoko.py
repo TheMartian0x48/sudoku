@@ -250,7 +250,7 @@ class Sudoko:
         self.grid[r][c] = val
         self.move.append((r, c))
 
-    def get(self, r, c, val):
+    def get(self, r, c):
         if r > 8 or r < 0 or c < 0 or c > 8:
             print("Out of range")
             return
