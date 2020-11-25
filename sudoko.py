@@ -92,6 +92,14 @@ class Sudoko:
                     print(f"{self.grid[r][c]} appear again in box {b + 1}")
                     return False
                 box[box_idx][self.grid[r][c]] = True
+                for i in range(1, 10):
+                    if row[i] == False:
+                        return False
+            if r % 3 == 2:
+                for i in range(1, 10):
+                    if box[0][i] == False or box[1][i] == False or box[2][i] == False:
+                        return False
+
         # checking columns
         for c in range(9):
             col = [False for i in range(10)]
@@ -100,6 +108,9 @@ class Sudoko:
                     print(f"{self.grid[r][c]} appear again in col {c + 1}")
                     return False
                 col[self.grid[r][c]] = True
+                for i in range(1, 10):
+                    if col[i] == False:
+                        return False
         print("Valid")
         return True
 
@@ -164,7 +175,6 @@ class Sudoko:
             for v in range(1, 10):
                 self.grid[r][c] = v
                 if self.__check_row(r) and self.__check_column(c) and self.__check_box(r, c):
-                    print(self)
                     self.grid[r][c] = -1
                     return True
             self.grid[r][c] = -1
@@ -230,8 +240,15 @@ class Sudoko:
         result += "\t┗━━━┷━━━┷━━━┻━━━┷━━━┷━━━┻━━━┷━━━┷━━━┛\n"
         return result
 
+    def set(self, r, c, val):
+        if r > 8 or r < 0 or c < 0 or c > 8:
+            print("Out of range")
+            return
+        self.grid[r][c] = val
+
 
 if __name__ == "__main__":
     s = Sudoko(1)
     print(s)
     print(s.solvable())
+    print(s.check())
