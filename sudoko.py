@@ -9,15 +9,8 @@ class Sudoko:
         """
         self.level = level
         self.grid = self.initiate()
-        # self.grid = [[-1, -1, -1, -1, -1, 4, -1, 9, -1],
-        #              [8, -1, 2, 9, 7, -1, -1, -1, -1],
-        #              [9, -1, 1, 2, -1, -1, 3, -1, -1],
-        #              [-1, -1, -1, -1, 4, 9, 1, 5, 7],
-        #              [-1, 1, 3, -1, 5, -1, 9, 2, -1],
-        #              [5, 7, 9, -1, 2, -1, -1, -1, -1],
-        #              [-1, -1, 7, -1, -1, 2, 6, -1, 3],
-        #              [-1, -1, -1, -1, 3, 8, 2, -1, 5],
-        #              [-1, 2, -1, 5, -1, -1, -1, -1, -1]]
+        self.move = []
+        self.__omit()
 
     def initiate(self):
         """
@@ -63,6 +56,19 @@ class Sudoko:
             grid[b2 * 3], grid[b2 * 3 + 1], grid[b2 * 3 + 2] = tmp1, tmp2, tmp3
 
         return grid
+
+    def __omit(self):
+        number = 30
+        pair = [(i, j) for i in range(9) for j in range(9)]
+        while number > 0:
+            p = choice(pair)
+            val = self.grid[p[0]][p[1]]
+            self.grid[p[0]][p[1]] = -1
+            if self.solvable() == False:
+                self.grid[p[0]][p[1]] = val
+            else:
+                number -= 1
+                pair.remove(p)
 
     def check(self):
         """
@@ -153,7 +159,6 @@ class Sudoko:
         if r == 8 and c == 8:
             if self.grid[r][c] != -1:
                 if self.__check_row(r) and self.__check_column(c) and self.__check_box(r, c):
-                    print(self)
                     return True
                 return False
             for v in range(1, 10):
@@ -162,6 +167,7 @@ class Sudoko:
                     print(self)
                     self.grid[r][c] = -1
                     return True
+            self.grid[r][c] = -1
             return False
 
         for v in range(1, 10):
@@ -171,6 +177,7 @@ class Sudoko:
                 while self.grid[rr][cc] != -1:
                     cc += 1
                     if rr == 8 and cc == 8:
+                        self.grid[r][c] = -1
                         return self.__backtrack(rr, cc)
                     if cc == 9:
                         cc,  rr = 0, rr + 1
