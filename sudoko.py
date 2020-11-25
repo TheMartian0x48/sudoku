@@ -167,7 +167,7 @@ class Sudoko:
     def __backtrack(self, r, c):
         """
         Check given board is solvable or not
-        return True when board is solvable 
+        return True when board is solvable
         otherwise False
         """
         if r == 8 and c == 8:
@@ -203,7 +203,7 @@ class Sudoko:
     def solvable(self) -> bool:
         """
         Check given board is solvable or not
-        return True when board is solvable 
+        return True when board is solvable
         otherwise False
         """
         for r in range(9):
@@ -248,12 +248,19 @@ class Sudoko:
             print("Out of range")
             return
         self.grid[r][c] = val
+        self.move.append((r, c))
 
     def get(self, r, c, val):
         if r > 8 or r < 0 or c < 0 or c > 8:
             print("Out of range")
             return
         return self.grid[r][c]
+
+    def undo(self):
+        if len(self.move) > 0:
+            l = self.move[-1]
+            self.grid[l[0]][l[1]] = -1
+            self.move.remove(l)
 
 
 if __name__ == "__main__":
