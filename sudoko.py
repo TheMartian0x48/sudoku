@@ -122,6 +122,7 @@ class Sudoko:
         Reset game to new begining
         """
         self.grid = self.initiate()
+        self.__omit()
 
     def __check_row(self, r):
         """
