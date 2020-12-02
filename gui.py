@@ -83,6 +83,14 @@ def process_mouse(x, y, v):
         return
     sudoko.set(r, c, v)
 
+# ==========================================================================
+def was_last_move():
+    global sudoko
+    for r in range(9):
+        for c in range(9):
+            if sudoko.get(r, c) == -1:
+                return False
+    return True
 
 # ==========================================================================
 initiate()
@@ -121,6 +129,10 @@ while run:
 
     if val in range(1, 9):
         process_mouse(*pygame.mouse.get_pos(), val)
+
+    if was_last_move():
+        print("WOHO")
+        exit(0)
 
     window.fill(WHITE)
     draw(window, font)
