@@ -2,6 +2,7 @@ import pygame
 from sudoko import Sudoko
 from cell import Cell
 from Time import Time
+import os
 
 # ==========================================================================
 # color
@@ -20,8 +21,10 @@ cell_width = 56
 pygame.init()
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("SUDOKO")
-font = pygame.font.SysFont("comicsans", 30, False);
+font = pygame.font.SysFont("comicsans", 30, False)
 clock = pygame.time.Clock()
+win_image = pygame.image.load(os.path.join('data', 'win.png'))
+lose_image = pygame.image.load(os.path.join('data', 'lose.png'))
 # ==========================================================================
 sudoko = None
 timer = None
@@ -71,17 +74,31 @@ def draw(window, font):
     window.blit(timer_text, (window_width - 100, window_width + 20))
 
 
+def draw_win_window(window, min, sec):
+    window.blit(win_image, (0, 0))
+    font1 = pygame.font.SysFont("comicsans", 25, False)
+    text = font1.render(f"{min} minutes {sec} seconds", True, BLACK)
+    window.blit(text, (window_width // 17 * 10, window_height // 4))
+
+
+def draw_lose_window(window, min, sec):
+    window.blit(lose_image, (0, 0))
+    font1 = pygame.font.SysFont("comicsans", 25, False)
+    text = font1.render(f"{min} minutes {sec} seconds", True, BLACK)
+    window.blit(text, (window_width // 17 * 10, window_height // 2))
+
+
 # ==========================================================================
 def process_mouse(x, y, v):
-    print(f"{x}, {y}")
+    # print(f"{x}, {y}")
     if v not in range(1, 10) or y > window_width:
         return
     r = y // cell_width
     c = x // cell_width
-    print(f"\t{{{r}, {c}, {v}}}")
     if cells[r][c].fixed:
         return
     sudoko.set(r, c, v)
+
 
 # ==========================================================================
 def was_last_move():
@@ -91,6 +108,7 @@ def was_last_move():
             if sudoko.get(r, c) == -1:
                 return False
     return True
+
 
 # ==========================================================================
 initiate()
@@ -122,19 +140,55 @@ while run:
         val = 9
     else:
         val = -1
+    if keys[pygame.K_BACKSPACE]:
+        run = False
 
     if keys[pygame.K_TAB]:
         initiate()
         val = -1
 
-    if val in range(1, 9):
+    if val in range(1, 10):
         process_mouse(*pygame.mouse.get_pos(), val)
 
     if was_last_move():
-        print("WOHO")
-        exit(0)
+        if sudoko.check():
+            t = timer.time()
+            run2 = True
+            while run2:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        exit(0)
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_SPACE]:
+                    run2 = False
+                if keys[pygame.K_BACKSPACE]:
+                    exit(0)
+                window.fill(WHITE)
+                draw_win_window(window, *t)
+                pygame.display.update()
+                clock.tick(20)
+        else:
+            t = timer.time()
+            run2 = True
+            while run2:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        exit(0)
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_SPACE]:
+                    run2 = False
+                if keys[pygame.K_BACKSPACE]:
+                    exit(0)
+                window.fill(WHITE)
+                draw_lose_window(window, *t)
+                pygame.display.update()
+                clock.tick(20)
+        initiate()
+        val = -1
+        print(sudoko)
 
     window.fill(WHITE)
     draw(window, font)
+
     pygame.display.update()
     clock.tick(20)
