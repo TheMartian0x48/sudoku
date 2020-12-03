@@ -111,84 +111,89 @@ def was_last_move():
 
 
 # ==========================================================================
-initiate()
-run = True
-val = -1
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+def main():
+    initiate()
+    run = True
+    val = -1
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_1] or keys[pygame.K_KP1]:
+            val = 1
+        elif keys[pygame.K_2] or keys[pygame.K_KP2]:
+            val = 2
+        elif keys[pygame.K_3] or keys[pygame.K_KP3]:
+            val = 3
+        elif keys[pygame.K_4] or keys[pygame.K_KP4]:
+            val = 4
+        elif keys[pygame.K_5] or keys[pygame.K_KP5]:
+            val = 5
+        elif keys[pygame.K_6] or keys[pygame.K_KP6]:
+            val = 6
+        elif keys[pygame.K_7] or keys[pygame.K_KP7]:
+            val = 7
+        elif keys[pygame.K_8] or keys[pygame.K_KP8]:
+            val = 8
+        elif keys[pygame.K_9] or keys[pygame.K_KP9]:
+            val = 9
+        else:
+            val = -1
+        if keys[pygame.K_BACKSPACE]:
             run = False
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_1] or keys[pygame.K_KP1]:
-        val = 1
-    elif keys[pygame.K_2] or keys[pygame.K_KP2]:
-        val = 2
-    elif keys[pygame.K_3] or keys[pygame.K_KP3]:
-        val = 3
-    elif keys[pygame.K_4] or keys[pygame.K_KP4]:
-        val = 4
-    elif keys[pygame.K_5] or keys[pygame.K_KP5]:
-        val = 5
-    elif keys[pygame.K_6] or keys[pygame.K_KP6]:
-        val = 6
-    elif keys[pygame.K_7] or keys[pygame.K_KP7]:
-        val = 7
-    elif keys[pygame.K_8] or keys[pygame.K_KP8]:
-        val = 8
-    elif keys[pygame.K_9] or keys[pygame.K_KP9]:
-        val = 9
-    else:
-        val = -1
-    if keys[pygame.K_BACKSPACE]:
-        run = False
+        if keys[pygame.K_TAB]:
+            initiate()
+            val = -1
 
-    if keys[pygame.K_TAB]:
-        initiate()
-        val = -1
+        if val in range(1, 10):
+            process_mouse(*pygame.mouse.get_pos(), val)
 
-    if val in range(1, 10):
-        process_mouse(*pygame.mouse.get_pos(), val)
-
-    if was_last_move():
-        if sudoko.check():
-            t = timer.time()
-            run2 = True
-            while run2:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
+        if was_last_move():
+            if sudoko.check():
+                t = timer.time()
+                run2 = True
+                while run2:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            exit(0)
+                    keys = pygame.key.get_pressed()
+                    if keys[pygame.K_SPACE]:
+                        run2 = False
+                    if keys[pygame.K_BACKSPACE]:
                         exit(0)
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_SPACE]:
-                    run2 = False
-                if keys[pygame.K_BACKSPACE]:
-                    exit(0)
-                window.fill(WHITE)
-                draw_win_window(window, *t)
-                pygame.display.update()
-                clock.tick(20)
-        else:
-            t = timer.time()
-            run2 = True
-            while run2:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
+                    window.fill(WHITE)
+                    draw_win_window(window, *t)
+                    pygame.display.update()
+                    clock.tick(20)
+            else:
+                t = timer.time()
+                run2 = True
+                while run2:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            exit(0)
+                    keys = pygame.key.get_pressed()
+                    if keys[pygame.K_SPACE]:
+                        run2 = False
+                    if keys[pygame.K_BACKSPACE]:
                         exit(0)
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_SPACE]:
-                    run2 = False
-                if keys[pygame.K_BACKSPACE]:
-                    exit(0)
-                window.fill(WHITE)
-                draw_lose_window(window, *t)
-                pygame.display.update()
-                clock.tick(20)
-        initiate()
-        val = -1
-        print(sudoko)
+                    window.fill(WHITE)
+                    draw_lose_window(window, *t)
+                    pygame.display.update()
+                    clock.tick(20)
+            initiate()
+            val = -1
+            print(sudoko)
 
-    window.fill(WHITE)
-    draw(window, font)
+        window.fill(WHITE)
+        draw(window, font)
 
-    pygame.display.update()
-    clock.tick(20)
+        pygame.display.update()
+        clock.tick(20)
+
+
+if __name__ == '__main__':
+    main()
